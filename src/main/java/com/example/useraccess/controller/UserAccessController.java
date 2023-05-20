@@ -12,34 +12,28 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.useraccess.model.FileInfo;
 import com.example.useraccess.message.ResponseMessage;
 import com.example.useraccess.service.FilesStorageService;
-@RestController
+@Controller
 public class UserAccessController {
 
     Logger logger = LoggerFactory.getLogger(UserAccessController.class);
     @Autowired
-    FilesStorageService storageService;
+    public FilesStorageService storageService;
 
     @PostMapping("/userdata")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
         try {
 
             FileInfo filedata = new FileInfo(id, file.getOriginalFilename() , file.getBytes());
-            String fileName = filedata.getName();
-            logger.info("#### Request File Name : --> {}", fileName);
-            if(fileName.endsWith(".pdf")) {
-                storageService.save(filedata);
-                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Userdata uploaded successfully!"));
-            }
-            else {
-                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Userdata file is not a PDF file"));
-            }
+            logger.info("#### Request File Name : --> {} - {} - {}", filedata.getId(), filedata.getName(), filedata.getData().length);
+            storageService.save(filedata);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Userdata uploaded successfully!"));
         } catch (Exception e) {
             logger.error("ERROR: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("Could not upload the file"));
         }
     }
 
-    @GetMapping("/getUserData")
+    @GetMapping("/users")
     public ResponseEntity<Object[]> getListUsers() {
         logger.info("### List all users");
         Object[] users = storageService.getAllUsers();
@@ -47,7 +41,7 @@ public class UserAccessController {
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
-    @DeleteMapping("/deleteUserData/{id}")
+    @DeleteMapping("/user/{id}")
     @ResponseBody
     public ResponseEntity<ResponseMessage> getDeleteUser(@PathVariable String id) {
         String message = "";

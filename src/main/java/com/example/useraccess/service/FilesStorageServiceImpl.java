@@ -15,13 +15,12 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         userprofiles.put(userdata.getId(), userdata);
     }
 
+    @Override
     public Object[] getAllUsers() {
         return userprofiles.values().toArray();
     }
-    public FileInfo getUserdata(String id) {
-        return userprofiles.get(id);
-    }
 
+    @Override
     public boolean deleteUserdata(String id) {
         boolean status = false;
         FileInfo userdata = userprofiles.remove(id);
