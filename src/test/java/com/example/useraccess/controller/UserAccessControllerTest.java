@@ -77,7 +77,7 @@ public class UserAccessControllerTest {
 
         when(storageService.getAllUsers()).thenCallRealMethod();
 
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get("/getUserData"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(userprofiles.size()));
     }
@@ -88,7 +88,7 @@ public class UserAccessControllerTest {
         String id = "1234";
         when(storageService.deleteUserdata(id)).thenCallRealMethod();
 
-        mockMvc.perform(delete("/user/{id}", id))
+        mockMvc.perform(delete("/deleteUserData/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("User data successfully deleted!"));
     }

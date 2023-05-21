@@ -33,7 +33,7 @@ public class UserAccessController {
         }
     }
 
-    @GetMapping("/users")
+    @GetMapping("/getUserData")
     public ResponseEntity<Object[]> getListUsers() {
         logger.info("### List all users");
         Object[] users = storageService.getAllUsers();
@@ -41,7 +41,7 @@ public class UserAccessController {
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/deleteUserData/{id}")
     @ResponseBody
     public ResponseEntity<ResponseMessage> getDeleteUser(@PathVariable String id) {
         String message = "";
